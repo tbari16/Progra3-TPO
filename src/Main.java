@@ -12,43 +12,24 @@ public class Main {
         publicaciones.add(new Publicacion(2, "Sofia", LocalDateTime.of(2026, 10, 15, 18, 30), 15, 10));
         publicaciones.add(new Publicacion(4, "Pedro", LocalDateTime.of(2026, 10, 13, 10, 0), 10, 2));
 
-        // FUNCIONALIDAD 2: red de contactos entre los mismos usuarios
-        Grafo red = DatosEjemplo.crearRedUsuarios();
-
         Scanner teclado = new Scanner(System.in);
         int opcion = 0;
 
-        do {
-            System.out.println("\n--- RED SOCIAL UNIVERSITARIA ---");
-            System.out.println("1. Organizar muro de publicaciones");
-            System.out.println("2. Buscar cadena de difusion mas rapida");
-            System.out.println("3. Salir");
-            System.out.print("Elegi una opcion: ");
-            opcion = leerNumero(teclado);
-
-            if (opcion == 1) {
-                menuPublicaciones(teclado, publicaciones);
-            } else if (opcion == 2) {
-                menuDifusion(teclado, red);
-            } else if (opcion == 3) {
-                System.out.println("Saliendo del programa...");
-            } else {
-                System.out.println("Opcion incorrecta.");
-            }
-        } while (opcion != 3);
-
-        teclado.close();
-    }
-    private static void menuPublicaciones(Scanner teclado, ArrayList<Publicacion> publicaciones) {
-        int opcion;
         do {
             System.out.println("\n--- MURO DE PUBLICACIONES ---");
             System.out.println("1. Mostrar publicaciones originales");
             System.out.println("2. Ordenar por fecha (mas recientes primero)");
             System.out.println("3. Ordenar por relevancia (mayor primero)");
-            System.out.println("4. Volver al menu principal");
+            System.out.println("4. Salir");
             System.out.print("Elegi una opcion: ");
-            opcion = leerNumero(teclado);
+
+            if (!teclado.hasNextInt()) {
+                System.out.println("Ingresa un numero del 1 al 4.");
+                teclado.next();
+                continue;
+            }
+
+            opcion = teclado.nextInt();
 
             if (opcion == 1) {
                 System.out.println("\nPUBLICACIONES ORIGINALES:");
@@ -61,10 +42,15 @@ public class Main {
                 System.out.println("\nORDENADAS POR RELEVANCIA:");
                 ArrayList<Publicacion> porRelevancia = Publicacion.ordenarPorRelevancia(publicaciones);
                 mostrarPublicaciones(porRelevancia);
-            } else if (opcion != 4) {
+            } else if (opcion == 4) {
+                System.out.println("Saliendo del muro...");
+            } else {
                 System.out.println("Opcion incorrecta.");
             }
+
         } while (opcion != 4);
+
+        teclado.close();
     }
 
     private static void mostrarPublicaciones(ArrayList<Publicacion> publicaciones) {
