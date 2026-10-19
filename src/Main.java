@@ -62,4 +62,14 @@ public class Main {
             }
         }
     }
+
+    Iniciativa[] iniciativas = {
+            new Iniciativa(1, 6, 30),
+            new Iniciativa(2, 5, 24),
+            new Iniciativa(3, 5, 24)
+    };
+
+    int presupuesto = 15;
+
+        SeleccionIniciativas.seleccionarIniciativas(iniciativas, presupuesto);
 }
