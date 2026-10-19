@@ -5,31 +5,62 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
+        // FUNCIONALIDAD 1: datos originales del proyecto
         ArrayList<Publicacion> publicaciones = new ArrayList<>();
-
         publicaciones.add(new Publicacion(3, "Ana", LocalDateTime.of(2026, 10, 15, 18, 30), 20, 5));
         publicaciones.add(new Publicacion(1, "Juan", LocalDateTime.of(2026, 10, 14, 12, 0), 30, 5));
         publicaciones.add(new Publicacion(2, "Sofia", LocalDateTime.of(2026, 10, 15, 18, 30), 15, 10));
         publicaciones.add(new Publicacion(4, "Pedro", LocalDateTime.of(2026, 10, 13, 10, 0), 10, 2));
 
-        Scanner teclado = new Scanner(System.in);
-        int opcion = 0;
+        // FUNCIONALIDAD 2: red de contactos entre los mismos usuarios
+        Grafo red = DatosEjemplo.crearRedUsuarios();
 
+        // FUNCIONALIDAD 3: iniciativas para financiar
+        Iniciativa[] iniciativas = {
+                new Iniciativa(1, 6, 30),
+                new Iniciativa(2, 5, 24),
+                new Iniciativa(3, 5, 24)
+        };
+        int presupuesto = 15;
+
+        Scanner teclado = new Scanner(System.in);
+        int opcion;
+
+        do {
+            System.out.println("\n--- RED SOCIAL UNIVERSITARIA ---");
+            System.out.println("1. Organizar muro de publicaciones");
+            System.out.println("2. Buscar cadena de difusion mas rapida");
+            System.out.println("3. Seleccionar iniciativas para financiar");
+            System.out.println("4. Salir");
+            System.out.print("Elegi una opcion: ");
+            opcion = leerNumero(teclado);
+
+            if (opcion == 1) {
+                menuPublicaciones(teclado, publicaciones);
+            } else if (opcion == 2) {
+                menuDifusion(teclado, red);
+            } else if (opcion == 3) {
+                menuIniciativas(teclado, iniciativas, presupuesto);
+            } else if (opcion == 4) {
+                System.out.println("Saliendo del programa...");
+            } else {
+                System.out.println("Opcion incorrecta.");
+            }
+        } while (opcion != 4);
+
+        teclado.close();
+    }
+
+    private static void menuPublicaciones(Scanner teclado, ArrayList<Publicacion> publicaciones) {
+        int opcion;
         do {
             System.out.println("\n--- MURO DE PUBLICACIONES ---");
             System.out.println("1. Mostrar publicaciones originales");
             System.out.println("2. Ordenar por fecha (mas recientes primero)");
             System.out.println("3. Ordenar por relevancia (mayor primero)");
-            System.out.println("4. Salir");
+            System.out.println("4. Volver al menu principal");
             System.out.print("Elegi una opcion: ");
-
-            if (!teclado.hasNextInt()) {
-                System.out.println("Ingresa un numero del 1 al 4.");
-                teclado.next();
-                continue;
-            }
-
-            opcion = teclado.nextInt();
+            opcion = leerNumero(teclado);
 
             if (opcion == 1) {
                 System.out.println("\nPUBLICACIONES ORIGINALES:");
@@ -42,16 +73,12 @@ public class Main {
                 System.out.println("\nORDENADAS POR RELEVANCIA:");
                 ArrayList<Publicacion> porRelevancia = Publicacion.ordenarPorRelevancia(publicaciones);
                 mostrarPublicaciones(porRelevancia);
-            } else if (opcion == 4) {
-                System.out.println("Saliendo del muro...");
-            } else {
+            } else if (opcion != 4) {
                 System.out.println("Opcion incorrecta.");
             }
-
         } while (opcion != 4);
-
-        teclado.close();
     }
+
 
     private static void mostrarPublicaciones(ArrayList<Publicacion> publicaciones) {
         if (publicaciones.isEmpty()) {
@@ -115,6 +142,39 @@ public class Main {
             } else if (opcion != 3) {
                 System.out.println("Opcion incorrecta.");
             }
+        } while (opcion != 3);
+    }
+
+    private static void menuIniciativas(Scanner teclado, Iniciativa[] iniciativas, int presupuesto) {
+        int opcion;
+
+        do {
+            System.out.println("\n--- SELECCION DE INICIATIVAS ---");
+            System.out.println("1. Mostrar iniciativas y presupuesto");
+            System.out.println("2. Calcular iniciativas a financiar");
+            System.out.println("3. Volver al menu principal");
+            System.out.print("Elegi una opcion: ");
+            opcion = leerNumero(teclado);
+
+            if (opcion == 1) {
+                System.out.println("\nPresupuesto disponible: " + presupuesto);
+                System.out.println("Iniciativas:");
+
+                for (int i = 0; i < iniciativas.length; i++) {
+                    Iniciativa actual = iniciativas[i];
+                    System.out.println("- Iniciativa " + actual.getId()
+                            + " | Costo: " + actual.getCosto()
+                            + " | Impacto: " + actual.getImpacto());
+                }
+
+            } else if (opcion == 2) {
+                System.out.println("\n--- RESULTADO DE LA SELECCION ---");
+                SeleccionIniciativas.seleccionarIniciativas(iniciativas, presupuesto);
+
+            } else if (opcion != 3) {
+                System.out.println("Opcion incorrecta.");
+            }
+
         } while (opcion != 3);
     }
 
