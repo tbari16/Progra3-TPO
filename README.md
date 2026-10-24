@@ -1,3 +1,7 @@
+Antes de la explicación del código, algunas aclaraciones sobre como ejecutar el código:
+- El archivo principal es el Main que al ejecutarlo permitirá ver un menú en consola para poder ver las 3 funcionalidades.
+- Los archivos que empiezan por "Prueba" son los casos de prueba de cada funcionalidad: PruebasOrdenamientoPublicaciones corresponde a la funcionalidad 1, PruebasDijkstra corresponde a la funcionalidad 2 y PruebasSeleccionIniciativas corresponde a la funcionalidad 3. Dentro del código está comentado que hace cada prueba y que busca verificar.
+
 
 # Funcionalidades Obligatorias
 
