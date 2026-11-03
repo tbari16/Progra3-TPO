@@ -23,6 +23,19 @@ public class Main {
         };
         int presupuesto = 15;
 
+        // B1: estudiantes, habilidades y restricciones de los equipos
+        Estudiante[] estudiantes = {
+                new Estudiante(1, "Ana", new String[] {"Java", "BD"}),
+                new Estudiante(2, "Juan", new String[] {"Python"}),
+                new Estudiante(3, "Sofia", new String[] {"Java", "Python"}),
+                new Estudiante(4, "Pedro", new String[] {"BD", "Diseno"}),
+                new Estudiante(5, "Lucia", new String[] {"Diseno", "Python"}),
+                new Estudiante(6, "Tomas", new String[] {"Testing"})
+        };
+        String[] habilidadesRequeridas = {"Java", "Python", "BD", "Diseno"};
+        int[] obligatorios = {1}; // Ana debe integrar todos los equipos
+        int[][] incompatibles = {{2, 4}}; // Juan y Pedro no pueden ir juntos
+
         Scanner teclado = new Scanner(System.in);
         int opcion;
 
@@ -31,17 +44,23 @@ public class Main {
             System.out.println("1. Organizar muro de publicaciones");
             System.out.println("2. Buscar cadena de difusion mas rapida");
             System.out.println("3. Seleccionar iniciativas para financiar");
-            System.out.println("4. Salir");
+            // FACU: Acá tenemos que agregar en el menú la funcionalidad A1
+            System.out.println("5. Formar equipos con restricciones (B1)");
+            System.out.println("6. Salir");
             System.out.print("Elegi una opcion: ");
             opcion = leerNumero(teclado);
 
+            // FACU: También tenemos que agregar acá la opcion 4 cuando agreguemos la funcionalidad.
             if (opcion == 1) {
                 menuPublicaciones(teclado, publicaciones);
             } else if (opcion == 2) {
                 menuDifusion(teclado, red);
             } else if (opcion == 3) {
                 menuIniciativas(teclado, iniciativas, presupuesto);
-            } else if (opcion == 4) {
+            } else if (opcion == 5) {
+                menuEquipos(teclado, estudiantes, habilidadesRequeridas,
+                        obligatorios, incompatibles);
+            } else if (opcion == 6) {
                 System.out.println("Saliendo del programa...");
             } else {
                 System.out.println("Opcion incorrecta.");
@@ -175,6 +194,79 @@ public class Main {
                 System.out.println("Opcion incorrecta.");
             }
 
+        } while (opcion != 3);
+    }
+
+    private static void menuEquipos(Scanner teclado, Estudiante[] estudiantes,
+                                    String[] habilidadesRequeridas, int[] obligatorios, int[][] incompatibles) {
+
+        int opcion;
+        do {
+            System.out.println("\n--- FORMACION DE EQUIPOS (B1) ---");
+            System.out.println("1. Mostrar estudiantes y restricciones");
+            System.out.println("2. Buscar todos los equipos validos");
+            System.out.println("3. Volver al menu principal");
+            System.out.print("Elegi una opcion: ");
+            opcion = leerNumero(teclado);
+
+            if (opcion == 1) {
+                System.out.println("\nESTUDIANTES DISPONIBLES:");
+                for (Estudiante e : estudiantes) {
+                    System.out.print(e.getId() + ". " + e.getNombre() + " | Habilidades: ");
+                    for (String habilidad : e.getHabilidades()) {
+                        System.out.print(habilidad + " ");
+                    }
+                    System.out.println();
+                }
+
+                System.out.print("Habilidades requeridas: ");
+                for (String habilidad : habilidadesRequeridas) {
+                    System.out.print(habilidad + " ");
+                }
+                System.out.println();
+
+                System.out.print("IDs obligatorios: ");
+                for (int id : obligatorios) {
+                    System.out.print(id + " ");
+                }
+                System.out.println();
+
+                System.out.println("Pares incompatibles:");
+                for (int[] par : incompatibles) {
+                    System.out.println("- IDs " + par[0] + " y " + par[1]);
+                }
+
+            } else if (opcion == 2) {
+                System.out.print("Cantidad de integrantes por equipo: ");
+                int tamano = leerNumero(teclado);
+
+                if (tamano <= 0 || tamano > estudiantes.length) {
+                    System.out.println("Tamano incorrecto.");
+                } else {
+                    ArrayList<ArrayList<Estudiante>> equipos = FormadorEquiposBacktracking.formarEquipos(
+                            estudiantes, tamano, habilidadesRequeridas,
+                            obligatorios, incompatibles);
+
+                    if (equipos.isEmpty()) {
+                        System.out.println("No hay equipos que cumplan las restricciones.");
+                    } else {
+                        System.out.println("\nEquipos validos encontrados: " + equipos.size());
+                        for (int i = 0; i < equipos.size(); i++) {
+                            System.out.print("Equipo " + (i + 1) + ": ");
+                            ArrayList<Estudiante> equipo = equipos.get(i);
+                            for (int j = 0; j < equipo.size(); j++) {
+                                if (j > 0) {
+                                    System.out.print(" - ");
+                                }
+                                System.out.print(equipo.get(j).getNombre());
+                            }
+                            System.out.println();
+                        }
+                    }
+                }
+            } else if (opcion != 3) {
+                System.out.println("Opcion incorrecta.");
+            }
         } while (opcion != 3);
     }
 
