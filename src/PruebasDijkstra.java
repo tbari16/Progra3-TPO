@@ -1,3 +1,6 @@
+
+
+
 public class PruebasDijkstra {
     static int total = 0;
     static int correctas = 0;

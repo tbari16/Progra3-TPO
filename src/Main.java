@@ -44,20 +44,24 @@ public class Main {
             System.out.println("1. Organizar muro de publicaciones");
             System.out.println("2. Buscar cadena de difusion mas rapida");
             System.out.println("3. Seleccionar iniciativas para financiar");
-            // FACU: Acá tenemos que agregar en el menú la funcionalidad A1
+            System.out.println("4. Consultar tiempos minimos entre usuarios");
             System.out.println("5. Formar equipos con restricciones (B1)");
             System.out.println("6. Salir");
             System.out.print("Elegi una opcion: ");
             opcion = leerNumero(teclado);
 
-            // FACU: También tenemos que agregar acá la opcion 4 cuando agreguemos la funcionalidad.
+
             if (opcion == 1) {
                 menuPublicaciones(teclado, publicaciones);
             } else if (opcion == 2) {
                 menuDifusion(teclado, red);
             } else if (opcion == 3) {
                 menuIniciativas(teclado, iniciativas, presupuesto);
-            } else if (opcion == 5) {
+            }
+            else if (opcion == 4) {
+                break;
+            }
+            else if (opcion == 5) {
                 menuEquipos(teclado, estudiantes, habilidadesRequeridas,
                         obligatorios, incompatibles);
             } else if (opcion == 6) {
@@ -284,4 +288,6 @@ public class Main {
         }
         return teclado.nextInt();
     }
+
+
 }
