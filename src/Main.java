@@ -15,6 +15,8 @@ public class Main {
         // FUNCIONALIDAD 2: red de contactos entre los mismos usuarios
         Grafo red = DatosEjemplo.crearRedUsuarios();
 
+        ResultadoFloyd resultadoA1 = AlgoritmoFloyd.calcular(red);
+
         // FUNCIONALIDAD 3: iniciativas para financiar
         Iniciativa[] iniciativas = {
                 new Iniciativa(1, 6, 30),
@@ -59,7 +61,7 @@ public class Main {
                 menuIniciativas(teclado, iniciativas, presupuesto);
             }
             else if (opcion == 4) {
-                break;
+                menuFloyd(teclado,red,resultadoA1);
             }
             else if (opcion == 5) {
                 menuEquipos(teclado, estudiantes, habilidadesRequeridas,
@@ -167,6 +169,81 @@ public class Main {
             }
         } while (opcion != 3);
     }
+
+    private static void menuFloyd(Scanner teclado, Grafo red, ResultadoFloyd resultado) {
+
+        int opcion;
+
+        do {
+            System.out.println("\n--- CONSULTAS DE DIFUSION (A1 - FLOYD) ---");
+            System.out.println("1. Consultar tiempo y cadena entre dos usuarios");
+            System.out.println("2. Mostrar resultados entre todos los usuarios");
+            System.out.println("3. Volver al menu principal");
+            System.out.print("Elegi una opcion: ");
+
+            opcion = leerNumero(teclado);
+
+            if (opcion == 1) {
+
+                System.out.println("\nUsuarios disponibles:");
+                mostrarUsuarios(red);
+
+                System.out.print("Numero del usuario de origen: ");
+                int origen = leerNumero(teclado);
+
+                System.out.print("Numero del usuario de destino: ");
+                int destino = leerNumero(teclado);
+
+                if (origen < 0 || origen >= red.cantidadUsuarios() ||
+                        destino < 0 || destino >= red.cantidadUsuarios()) {
+
+                    System.out.println("Usuario de origen o destino incorrecto.");
+
+                } else {
+
+                    long tiempo = resultado.getTiempo(origen, destino);
+
+                    if (tiempo == -1) {
+                        System.out.println("\nNo existe una cadena de difusion entre "
+                                + red.nombre(origen) + " y " + red.nombre(destino) + ".");
+
+                    } else {
+                        System.out.println("\nCadena mas rapida: "
+                                + resultado.getCadena(origen, destino));
+
+                        System.out.println("Tiempo minimo: " + tiempo + " minutos");
+                    }
+                }
+
+            } else if (opcion == 2) {
+
+                System.out.println("\n--- RESULTADOS DE FLOYD ---");
+
+                for (int i = 0; i < red.cantidadUsuarios(); i++) {
+                    for (int j = 0; j < red.cantidadUsuarios(); j++) {
+
+                        long tiempo = resultado.getTiempo(i, j);
+
+                        System.out.print("\n" + red.nombre(i) + " -> "
+                                + red.nombre(j) + ": ");
+
+                        if (tiempo == -1) {
+                            System.out.println("No existe cadena de difusion.");
+                        } else {
+                            System.out.println(resultado.getCadena(i, j)
+                                    + " | Tiempo: " + tiempo + " minutos");
+                        }
+                    }
+                }
+
+            } else if (opcion != 3) {
+                System.out.println("Opcion incorrecta.");
+            }
+
+        } while (opcion != 3);
+    }
+
+
 
     private static void menuIniciativas(Scanner teclado, Iniciativa[] iniciativas, int presupuesto) {
         int opcion;
