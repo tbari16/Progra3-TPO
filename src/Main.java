@@ -48,10 +48,10 @@ public class Main {
             System.out.println("3. Seleccionar iniciativas para financiar");
             System.out.println("4. Consultar tiempos minimos entre usuarios (A1)");
             System.out.println("5. Formar equipos con restricciones (B1)");
-            System.out.println("6. Salir");
+            System.out.println("6. Buscar cadenas alternativas de difusion (B3)");
+            System.out.println("7. Salir");
             System.out.print("Elegi una opcion: ");
             opcion = leerNumero(teclado);
-
 
             if (opcion == 1) {
                 menuPublicaciones(teclado, publicaciones);
@@ -67,11 +67,14 @@ public class Main {
                 menuEquipos(teclado, estudiantes, habilidadesRequeridas,
                         obligatorios, incompatibles);
             } else if (opcion == 6) {
+                menuCadenasAlternativas(teclado, red);
+            } else if (opcion == 7) {
                 System.out.println("Saliendo del programa...");
             } else {
                 System.out.println("Opcion incorrecta.");
             }
-        } while (opcion != 4);
+
+        } while (opcion != 7);
 
         teclado.close();
     }
@@ -349,6 +352,89 @@ public class Main {
                 System.out.println("Opcion incorrecta.");
             }
         } while (opcion != 3);
+    }
+
+    // FUNCIONALIDAD B3: busqueda de todas las cadenas alternativas con Backtracking.
+    private static void menuCadenasAlternativas(Scanner teclado, Grafo red) {
+        int opcion;
+
+        do {
+            System.out.println("\n--- CADENAS ALTERNATIVAS DE DIFUSION (B3) ---");
+            System.out.println("1. Buscar todas las cadenas validas");
+            System.out.println("2. Volver al menu principal");
+            System.out.print("Elegi una opcion: ");
+            opcion = leerNumero(teclado);
+
+            if (opcion == 1) {
+                System.out.println("\nUsuarios disponibles:");
+                mostrarUsuarios(red);
+
+                System.out.print("Numero del usuario de origen: ");
+                int origen = leerNumero(teclado);
+                System.out.print("Numero del usuario de destino: ");
+                int destino = leerNumero(teclado);
+
+                if (origen < 0 || origen >= red.cantidadUsuarios()
+                        || destino < 0 || destino >= red.cantidadUsuarios()) {
+                    System.out.println("Usuario de origen o destino incorrecto.");
+                    continue;
+                }
+
+                System.out.print("Tiempo maximo de transmision (minutos): ");
+                long tiempoMaximo = leerNumeroLargo(teclado);
+                System.out.print("Cantidad maxima de intermediarios: ");
+                int maxIntermediarios = leerNumero(teclado);
+
+                if (tiempoMaximo < 0 || maxIntermediarios < 0) {
+                    System.out.println("Los limites no pueden ser negativos.");
+                    continue;
+                }
+
+                System.out.print("Cantidad de usuarios excluidos (0 si no hay): ");
+                int cantidadExcluidos = leerNumero(teclado);
+
+                if (cantidadExcluidos < 0 || cantidadExcluidos > red.cantidadUsuarios()) {
+                    System.out.println("Cantidad de usuarios excluidos incorrecta.");
+                    continue;
+                }
+
+                int[] usuariosExcluidos = new int[cantidadExcluidos];
+                boolean excluidosValidos = true;
+
+                for (int i = 0; i < cantidadExcluidos; i++) {
+                    System.out.print("Numero del usuario excluido " + (i + 1) + ": ");
+                    int excluido = leerNumero(teclado);
+
+                    if (excluido < 0 || excluido >= red.cantidadUsuarios()) {
+                        System.out.println("Usuario excluido incorrecto.");
+                        excluidosValidos = false;
+                        break;
+                    }
+
+                    usuariosExcluidos[i] = excluido;
+                }
+
+                if (excluidosValidos) {
+                    CadenasAlternativas buscador = new CadenasAlternativas(red);
+                    System.out.println("\n--- RESULTADOS B3 ---");
+                    buscador.buscarCadenas(origen, destino, tiempoMaximo,
+                            maxIntermediarios, usuariosExcluidos);
+                }
+
+            } else if (opcion != 2) {
+                System.out.println("Opcion incorrecta.");
+            }
+
+        } while (opcion != 2);
+    }
+
+    private static long leerNumeroLargo(Scanner teclado) {
+        if (!teclado.hasNextLong()) {
+            System.out.println("Debes ingresar un numero entero.");
+            teclado.next();
+            return -1;
+        }
+        return teclado.nextLong();
     }
 
     private static void mostrarUsuarios(Grafo red) {
