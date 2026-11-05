@@ -46,7 +46,7 @@ public class Main {
             System.out.println("1. Organizar muro de publicaciones");
             System.out.println("2. Buscar cadena de difusion mas rapida");
             System.out.println("3. Seleccionar iniciativas para financiar");
-            System.out.println("4. Consultar tiempos minimos entre usuarios");
+            System.out.println("4. Consultar tiempos minimos entre usuarios (A1)");
             System.out.println("5. Formar equipos con restricciones (B1)");
             System.out.println("6. Salir");
             System.out.print("Elegi una opcion: ");
