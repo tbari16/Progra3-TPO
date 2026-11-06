@@ -229,4 +229,226 @@ donde n representa la cantidad de iniciativas y p representa el presupuesto disp
 
 # Funcionalidades Adicionales
 
-Las funcionalidades adicionales elegidas son: A1, B1 y B3
+
+## Funcionalidad A1 - Consultas de difusión entre todos los usuarios.
+
+### 1. Análisis del problema
+
+El problema consiste en poder consultar el menor tiempo de difusión entre cualquier par de usuarios de la red social, sin tener que repetir todo el cálculo cada vez que se realiza una consulta.
+
+Los datos se representan mediante un grafo dirigido. Cada vértice representa un usuario y cada arista representa un vínculo habilitado para transmitir información en un sentido determinado. Cada vínculo tiene un tiempo positivo, expresado en minutos.
+
+A diferencia de la funcionalidad anterior, en este caso no se busca solamente la cadena más rápida desde un origen determinado, sino que se necesita conocer los caminos mínimos entre todos los pares de usuarios.
+
+El objetivo es realizar un procesamiento inicial de la red, guardar los resultados obtenidos y permitir consultar posteriormente tanto el tiempo mínimo como la cadena correspondiente. También se debe informar cuando no exista una cadena de difusión entre dos usuarios.
+
+### 2. Selección de la estrategia y justificación
+
+La estrategia seleccionada es Programación Dinámica, mediante el algoritmo de Floyd.
+
+Elegimos esta estrategia porque permite calcular los caminos mínimos entre todos los pares de usuarios de un grafo. Para hacerlo, el algoritmo analiza progresivamente si pasar por un usuario intermedio permite encontrar una cadena de menor tiempo entre un origen y un destino.
+
+Esta estrategia resulta adecuada porque la funcionalidad necesita responder numerosas consultas entre distintos usuarios. De esta manera, se realiza el cálculo una sola vez y se guardan los resultados para utilizarlos posteriormente, evitando repetir el procesamiento para cada consulta.
+
+### 3. Explicación general de la implementación
+
+La clase Grafo representa la red de usuarios mediante una matriz de tiempos, donde se almacenan los vínculos directos y sus respectivos minutos. Al tratarse de un grafo dirigido, las conexiones tienen un sentido determinado. Cuando no existe un vínculo directo, se utiliza el valor -1.
+
+La clase AlgoritmoFloyd  contiene el método que realiza el cálculo. Primero, crea dos matrices: una para almacenar las distancias mínimas y otra para registrar el siguiente usuario que se debe visitar para reconstruir cada cadena. Inicialmente, los tiempos entre un usuario y sí mismo son cero, los vínculos directos toman sus tiempos correspondientes y los caminos inexistentes se representan con un valor máximo.
+
+Luego, el algoritmo recorre los usuarios como posibles intermediarios y compara si pasar por uno de ellos permite reducir el tiempo que ya se tenía registrado entre dos usuarios. Si encuentra un camino más rápido, actualiza el tiempo mínimo y guarda el siguiente usuario que permite reconstruir esa cadena.
+
+Finalmente, se utiliza la clase ResultadoFloyd, que conserva las matrices calculadas y permite consultar el tiempo mínimo y reconstruir la cadena correspondiente sin volver a ejecutar Floyd. También permite detectar cuando no existe un camino entre dos usuarios.
+
+### 4. Otras estrategias consideradas
+
+Una alternativa sería utilizar Dijkstra, que permite calcular el camino mínimo desde un usuario de origen hacia los demás usuarios de la red. Sin embargo, para consultar los caminos mínimos entre todos los pares, sería necesario ejecutar el algoritmo repetidamente, tomando cada usuario como origen.
+
+En cambio, Floyd permite realizar todos esos cálculos dentro de un único procesamiento inicial, por lo que resulta más práctico cuando se necesitan realizar numerosas consultas entre distintos pares de usuarios.
+
+Otra posibilidad sería utilizar Backtracking para explorar diferentes cadenas entre cada par de usuarios y quedarse con la de menor tiempo. Sin embargo, esta estrategia podría recorrer una gran cantidad de caminos posibles y generar un costo elevado a medida que aumenta la cantidad de usuarios y conexiones.
+
+Por estos motivos, se eligió Floyd, ya que permite obtener los caminos mínimos entre todos los usuarios y conservar los resultados para realizar consultas posteriores.
+
+### 5. Análisis de complejidad temporal
+
+La complejidad temporal del algoritmo de Floyd es O(n³), donde n representa la cantidad de usuarios de la red.
+
+Esto se debe a que el algoritmo utiliza tres ciclos anidados para recorrer los usuarios: uno para seleccionar el posible intermediario, otro para recorrer los orígenes y otro para recorrer los destinos. En cada combinación se compara si pasar por el intermediario permite encontrar un tiempo menor.
+
+Por otro lado, una vez finalizado el procesamiento inicial, consultar el tiempo mínimo entre dos usuarios tiene una complejidad de O(1), ya que simplemente se accede a una posición de la matriz. La reconstrucción de la cadena tiene una complejidad de O(n) en el peor caso, porque puede necesitar recorrer varios usuarios hasta llegar al destino.
+
+Por lo tanto, aunque el procesamiento inicial tiene un costo de O(n³), las consultas posteriores son mucho más rápidas, ya que no necesitan volver a ejecutar el algoritmo.
+
+## Funcionalidad B1 - Formación de equipos con restricciones.
+
+### 1. Análisis del problema
+
+La funcionalidad consiste en formar equipos de estudiantes de una red social universitaria, teniendo en cuenta ciertas condiciones y restricciones que deben cumplirse para que un equipo sea considerado válido.
+
+Los datos de entrada van a ser los siguientes: Los estudiantes disponibles para formar los equipos. El identificador, nombre y habilidades de cada estudiante. La cantidad de integrantes que debe tener cada equipo. Habilidades que deben estar cubiertas entre los integrantes. Los estudiantes que obligatoriamente deben participar. Por último, los pares de estudiantes que no pueden formar parte de un mismo equipo.
+
+Las restricciones que encontramos fueron las siguientes: Cada equipo debe tener exactamente la cantidad de integrantes solicitada. Además, entre todos los integrantes deben cubrir las habilidades requeridas. Todos los estudiantes obligatorios deben estar presentes en todos los equipos y los estudiantes incompatibles no pueden formar parte de un mismo equipo.
+
+Luego, un estudiante no puede aparecer más de una vez dentro de un mismo equipo. Por último, no se deben mostrar equipos repetidos que tengan los mismos integrantes en diferente orden.
+
+El objetivo es encontrar y mostrar todos los equipos que cumplan las condiciones establecidas, evitando las combinaciones repetidas. Además, si no es posible formar ningún equipo válido, el sistema deberá informar que no se encontraron soluciones.
+
+### 2. Selección de la estrategia y justificación
+
+La estrategia seleccionada para resolver este problema fue Backtracking (Vuelta Atrás), utilizando el esquema general del algoritmo que vimos en clase.
+
+La razón por la que decidimos utilizar Backtracking es porque necesitamos explorar diferentes combinaciones de estudiantes y verificar cuáles cumplen las restricciones del problema. Esta estrategia nos permite construir una solución de forma progresiva, agregando estudiantes a un equipo y comprobando si la combinación que estamos formando sigue siendo válida. En caso de encontrar una combinación que no cumpla las restricciones, podemos retroceder y probar con otros estudiantes.
+
+Además, Backtracking nos permite encontrar todas las soluciones posibles, que es justamente lo que necesitamos para esta funcionalidad. No buscamos solamente formar un equipo válido, sino encontrar todos los equipos que puedan construirse respetando las condiciones.
+
+Otra característica que consideramos importante para elegir esta estrategia es la posibilidad de aplicar poda de alternativas. Esto significa que podemos descartar una combinación antes de terminar de construirla cuando ya sabemos que no podrá convertirse en un equipo válido.
+
+### 3. Explicación general de la implementación
+
+Para implementar esta funcionalidad, primero creamos una clase Estudiante que permite representar a cada estudiante mediante su identificador, nombre y habilidades. También incorporamos un método para verificar si un estudiante posee una determinada habilidad.
+
+Luego creamos la clase FormadorEquipos, que contiene el algoritmo encargado de encontrar todos los equipos válidos utilizando Backtracking.
+
+Para desarrollar el algoritmo nos basamos en el pseudocódigo general de Backtracking que vimos en clase, donde se trabaja con una solución parcial, se generan posibles candidatos, se comprueba su factibilidad y se retrocede cuando corresponde.
+
+Primero, el algoritmo comienza con un equipo vacío y recorre los estudiantes disponibles para ir agregándolos de a uno. Cada vez que incorpora un estudiante, verifica si la combinación parcial sigue siendo factible.
+
+Esta verificación se realiza mediante el método esFactible, que comprueba que no se supere el tamaño permitido, que no existan estudiantes incompatibles dentro del equipo y que todavía queden lugares suficientes para incorporar a los integrantes obligatorios que faltan.
+
+Si alguna de estas condiciones no se cumple, se descarta esa alternativa y no se continúa explorando esa combinación. De esta manera aplicamos la poda de alternativas que vimos en clase.
+
+En cambio, si la combinación todavía es válida, el algoritmo comprueba mediante el método esSolucion si ya se formó un equipo completo que cumpla todas las condiciones. Para esto verifica que tenga la cantidad exacta de integrantes, que estén presentes todos los estudiantes obligatorios y que entre los integrantes se cubran las habilidades requeridas.
+
+Es importante mencionar que las habilidades se comprueban cuando el equipo está completo, porque un equipo parcial podría no cubrir todas las habilidades pero conseguirlo al incorporar nuevos estudiantes.
+
+Si se encuentra una solución válida, se guarda una copia del equipo en una lista de resultados para poder mostrarlo posteriormente.
+
+Luego, el algoritmo retrocede eliminando al último estudiante incorporado y continúa probando otras alternativas. Este procedimiento se repite hasta explorar todas las combinaciones posibles que no hayan sido descartadas por las restricciones.
+
+Para evitar equipos repetidos, al continuar una búsqueda se consideran solamente los estudiantes que aparecen después del último seleccionado. De esta manera, una combinación no vuelve a generarse únicamente por cambiar el orden de sus integrantes.
+
+Finalmente, desde el menú de consola podemos visualizar los estudiantes y las restricciones configuradas, ingresar la cantidad de integrantes por equipo y ejecutar el algoritmo para mostrar todos los equipos válidos encontrados.
+
+### 4. Otras estrategias consideradas
+
+Una posible estrategia o solución que pensamos para resolverlo era utilizar Greedy seleccionando primero a los estudiantes que cubran la mayor cantidad de habilidades requeridas y luego continuar agregando integrantes hasta completar el equipo. Sin embargo, esta estrategia no resulta buena porque una decisión que parece conveniente en un primer momento puede impedir formar otras combinaciones válidas. Además, nuestro objetivo no es encontrar únicamente un equipo que cumpla las condiciones, sino mostrar todos los equipos posibles. Por lo tanto, utilizar Greedy no nos garantiza encontrar todas las soluciones que necesita esta funcionalidad.
+
+Otra estrategia que analizamos fue Programación Dinámica, que permite resolver problemas utilizando resultados de subproblemas más pequeños y almacenándolos para evitar cálculos repetidos. Si bien podría aplicarse a otros problemas relacionados con la selección de estudiantes, en nuestro caso necesitamos generar equipos concretos y verificar diferentes restricciones entre sus integrantes. Además, debemos mostrar todas las combinaciones válidas y no solamente obtener un valor óptimo. Es por este motivo que consideramos que no sería la alternativa más sencilla para implementar esta funcionalidad.
+
+Es por estas razones que con el equipo decidimos utilizar Backtracking, debido a que permite generar las combinaciones de manera progresiva, comprobar restricciones y encontrar todas las soluciones válidas para cumplir con la funcionalidad.
+
+### 5. Análisis de complejidad temporal
+
+Para analizar la complejidad temporal del algoritmo de Backtracking, vamos a considerar que n representa la cantidad de estudiantes disponibles.
+
+Como el objetivo es formar equipos, el algoritmo debe explorar diferentes combinaciones de estudiantes. En términos generales, cada estudiante puede ser seleccionado o no seleccionado para integrar un equipo.
+
+Esto significa que si no consideramos las restricciones, la cantidad de combinaciones posibles puede crecer exponencialmente a medida que aumenta la cantidad de estudiantes.
+
+Por ejemplo, con 6 estudiantes y equipos de 3 integrantes existen 20 combinaciones diferentes. Si aumentamos la cantidad de estudiantes, también aumenta considerablemente la cantidad de alternativas que tenemos que analizar.
+
+En nuestro algoritmo utilizamos un método recursivo que va incorporando estudiantes y comprobando si la combinación sigue siendo válida. Si la combinación no cumple alguna restricción, se descarta y no se continúa explorando esa rama.
+
+Esta poda permite reducir la cantidad de alternativas que efectivamente se recorren, aunque no garantiza que siempre podamos descartar muchas combinaciones. En el peor caso, cuando las restricciones permiten continuar explorando prácticamente todas las alternativas, la búsqueda puede tener un crecimiento exponencial.
+
+Por lo tanto, la cantidad de combinaciones que puede explorar Backtracking tiene un costo de: O(2^n)
+
+Además, en cada combinación se realizan verificaciones de incompatibilidades, integrantes obligatorios y habilidades requeridas, por lo que el tiempo total de ejecución también depende del costo de estas comprobaciones.
+
+Si consideramos una cantidad fija de restricciones y habilidades, una cota simplificada del tiempo total de nuestra implementación es O(n × 2^n), ya que algunas verificaciones pueden recorrer los integrantes del equipo.
+
+De todas maneras, el aspecto principal de su complejidad es el crecimiento exponencial de las combinaciones posibles. La poda puede mejorar el tiempo de ejecución en muchos casos, pero no modifica ese comportamiento general en el peor caso.
+
+## Funcionalidad B3 - Cadenas alternativas de difusión
+
+### 1. Análisis del problema
+
+Esta funcionalidad consiste en encontrar todas las cadenas de contactos que permitan transmitir una convocatoria desde un usuario de origen hasta otro de destino, respetando determinadas restricciones.
+
+En este caso necesitamos encontrar todas las alternativas válidas y determinar cuál tiene el menor tiempo de transmisión.
+
+Los datos de entrada van a ser:
+
+- Los usuarios y vínculos que forman parte de la red social.
+- El tiempo estimado de transmisión de cada vínculo.
+- El usuario de origen y el usuario de destino.
+- El tiempo máximo permitido para la transmisión.
+- La cantidad máxima de usuarios intermediarios.
+- Un conjunto de usuarios excluidos.
+
+Las restricciones que encontramos fueron:
+
+- Los vínculos son dirigidos y tienen tiempos positivos.
+- El tiempo total de una cadena no puede superar el máximo establecido.
+- No se puede superar la cantidad máxima de intermediarios permitidos, sin contar al origen y al destino.
+- Los usuarios excluidos no pueden formar parte de las cadenas.
+- Un mismo usuario no puede aparecer más de una vez dentro de una cadena.
+- Puede ocurrir que no exista ninguna cadena que cumpla las restricciones.
+
+El objetivo es encontrar y mostrar todas las cadenas válidas, indicando los usuarios que las integran y su tiempo total. Además, se debe identificar la cadena más rápida e informar cuando no existan soluciones.
+
+### 2. Selección de la estrategia y justificación
+
+La estrategia seleccionada para resolver esta funcionalidad fue Backtracking. La razón por la que decidimos utilizar esta estrategia es porque el problema requiere explorar diferentes caminos entre dos usuarios para encontrar todas las cadenas que cumplan las condiciones establecidas. Entonces, Backtracking permite construir una solución de manera progresiva. En cada paso se analiza a qué usuarios se puede avanzar desde el usuario actual y se verifica si se cumplen las restricciones. Si el siguiente usuario es válido, se lo incorpora a la cadena y se continúa explorando de forma recursiva.
+
+Cuando se llega al destino, se registra la cadena encontrada. Luego, el algoritmo retrocede para probar otras alternativas que todavía no fueron analizadas.
+
+Una ventaja de esta estrategia es que permite descartar caminos que ya no pueden generar una solución válida. Por ejemplo, si se supera el tiempo máximo o la cantidad de intermediarios permitidos, no tiene sentido continuar explorando esa alternativa.
+
+Por estos motivos consideramos que Backtracking es adecuado, ya que permite encontrar todas las cadenas válidas y evitar continuar con recorridos que incumplen las restricciones.
+
+### 3. Explicación general de la implementación
+
+Para implementar esta funcionalidad reutilizamos la clase Grafo desarrollada para la funcionalidad 2, que representa la red mediante una matriz de adyacencia. En ella se almacenan los tiempos de transmisión y se utiliza -1 cuando no existe un vínculo directo.
+
+Creamos la clase CadenasAlternativas, que recibe un objeto Grafo y utiliza sus métodos para consultar los usuarios, verificar conexiones y obtener los tiempos de transmisión.
+
+El método principal es buscarCadenas, que recibe el origen, el destino, el tiempo máximo, el límite de intermediarios y los usuarios excluidos.
+
+Para realizar la búsqueda utilizamos arreglos de booleanos que permiten identificar los usuarios visitados y excluidos. Además, usamos una lista para almacenar la cadena actual y otra para conservar la mejor cadena encontrada.
+
+El algoritmo comienza desde el usuario de origen y, mediante el método recursivo backtracking, analiza las conexiones disponibles. Antes de avanzar verifica que el siguiente usuario no haya sido visitado, que no esté excluido y que no se superen los límites establecidos.
+
+Si cumple las condiciones, se incorpora a la cadena y continúa la búsqueda. Cuando llega al destino, muestra la cadena, incrementa el contador de soluciones y compara su tiempo con el menor registrado hasta ese momento.
+
+Después de cada llamada recursiva, el algoritmo elimina el último usuario agregado y lo desmarca como visitado. Esto permite retroceder y explorar otras alternativas.
+
+Las cadenas se muestran a medida que se encuentran, por lo que solamente necesitamos conservar la cadena actual y la mejor solución obtenida.
+
+Finalmente, integramos la funcionalidad al menú principal del sistema, utilizando el mismo grafo que Dijkstra y Floyd.
+
+También desarrollamos la clase PruebasCadenasAlternativas, donde utilizamos un grafo independiente con conexiones conocidas para verificar los resultados. Se realizaron 11 casos de prueba que contemplan diferentes restricciones, usuarios excluidos, límites de tiempo y situaciones donde no existen cadenas válidas.
+
+### 4. Otras estrategias seleccionadas
+
+Una de las estrategias que consideramos fue Greedy mediante el algoritmo de Dijkstra, utilizado anteriormente en la funcionalidad 2. Sin embargo, si bien Dijkstra permite encontrar los caminos de menor tiempo desde un usuario de origen, no está diseñado para encontrar todas las cadenas posibles. Como esta funcionalidad requiere mostrar todas las alternativas válidas y no solamente la más rápida, descartamos utilizarlo como solución principal.
+
+También consideramos Programación Dinámica mediante el algoritmo de Floyd. Este permite calcular los caminos mínimos entre todos los pares de usuarios de un grafo. Sin embargo, en nuestro caso solamente necesitamos analizar las cadenas entre un origen y un destino determinados y encontrar todas las alternativas que cumplan las restricciones.
+
+Por último, podríamos utilizar una búsqueda exhaustiva que explore todas las combinaciones y verifique las restricciones al finalizar cada recorrido. Sin embargo, esto implicaría continuar explorando caminos que ya sabemos que no pueden producir una solución válida.
+
+Por estos motivos es que optamos por Backtracking y no por el resto de estrategias.
+
+### 5. Análisis de complejidad temporal
+
+Para analizar la complejidad temporal consideramos que n representa la cantidad de usuarios del grafo.
+
+El algoritmo utiliza llamadas recursivas para explorar las diferentes cadenas posibles. En cada llamada se recorren los n usuarios para verificar cuáles pueden ser el siguiente integrante de la cadena, por lo que este recorrido tiene una complejidad de O(n).
+
+Como no se permite repetir usuarios, en cada nivel de la búsqueda disminuye la cantidad de alternativas disponibles.
+
+En el peor caso, si todos los usuarios están conectados y las restricciones no permiten descartar caminos, el algoritmo puede llegar a explorar una cantidad factorial de recorridos.
+
+Por lo tanto, la complejidad temporal en el peor caso es:
+
+**O(n!)**
+
+Sin embargo, las verificaciones de usuarios visitados, usuarios excluidos, tiempo máximo e intermediarios permiten reducir la cantidad de caminos explorados en muchos casos, aunque no modifican la complejidad del peor caso.
+
+En cuanto a la memoria, los arreglos, las listas y las llamadas recursivas utilizan un espacio adicional de O(n), ya que solamente almacenamos la cadena actual y la mejor encontrada.
+
+La matriz de adyacencia ocupa O(n²), pero pertenece a la clase Grafo que ya utilizamos en las demás funcionalidades y no necesitamos duplicarla.
+
+En conclusión, la complejidad temporal del algoritmo es O(n!) en el peor caso y el espacio adicional utilizado por la búsqueda es O(n). Esta complejidad es aceptable para trabajar con redes pequeñas, teniendo en cuenta que necesitamos encontrar todas las cadenas válidas y no solamente una.
+
