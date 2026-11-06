@@ -2,12 +2,9 @@ package algoritmos;
 
 public class AlgoritmoDijkstra {
 
-
-
     public static ResultadoDijkstra calcular(Grafo G, int v) {
 
         int n = G.cantidadUsuarios();
-
 
         if (v < 0 || v >= n) {
             throw new IllegalArgumentException("El usuario de origen no existe");
@@ -15,21 +12,17 @@ public class AlgoritmoDijkstra {
 
         StringBuilder decisiones = new StringBuilder();
 
-        // PASO 1: Visitados = {v}
         boolean[] visitados = new boolean[n];
         visitados[v] = true;
 
-        // PASO 2: algoritmos.Grafo auxiliar A, con los mismos usuarios
         Grafo A = new Grafo(G.nombres());
 
-        // Guarda el usuario anterior para reconstruir la cadena
         int[] anterior = new int[n];
 
         for (int i = 0; i < n; i++) {
             anterior[i] = -1;
         }
 
-        // Copiamos los vinculos directos desde el origen
         for (int p = 0; p < n; p++) {
 
             if (p != v && G.existeArista(v, p)) {
@@ -42,23 +35,19 @@ public class AlgoritmoDijkstra {
 
             }
 
-
         }
 
-        // Pendientes = Vertices(G) - Visitados
         boolean[] pendientes = new boolean[n];
 
         for (int p = 0; p < n; p++) {
             pendientes[p] = !visitados[p];
         }
 
-        // PASO 3: Elegir el pendiente de menor tiempo y actualizar caminos
         while (hayPendientes(pendientes)) {
 
             int w = -1;
             long menor = Long.MAX_VALUE;
 
-            // Funcion de seleccion Greedy
             for (int p = 0; p < n; p++) {
 
                 if (pendientes[p] && A.existeArista(v, p) && A.pesoArista(v, p) < menor) {
@@ -66,10 +55,7 @@ public class AlgoritmoDijkstra {
                     w = p;
                 }
 
-
             }
-
-            // Los pendientes restantes no se pueden alcanzar
 
             if (w == -1) {
 
@@ -83,16 +69,11 @@ public class AlgoritmoDijkstra {
                     .append(" con tiempo acumulado de ").append(menor)
                     .append(" minutos\n");
 
-            // auxPendientes = Pendientes (igual al pseudocodigo)
             boolean[] auxPendientes = pendientes.clone();
-
             for (int p = 0; p < n; p++) {
 
                 if (auxPendientes[p]) {
                     auxPendientes[p] = false;
-
-
-                    // ¿Existe un camino hasta w y un vinculo entre w y p?
                     if (A.existeArista(v, w) && G.existeArista(w, p)) {
                         long nuevoTiempo = A.pesoArista(v, w) + G.pesoArista(w, p);
 

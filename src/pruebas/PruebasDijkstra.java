@@ -11,7 +11,6 @@ public class PruebasDijkstra {
     static int total = 0;
     static int correctas = 0;
 
-    // Esto compara el tiempo minimo y los usuarios de la cadena
     static void probarCamino(String nombre, Grafo G, int origen, int destino, long tiempoEsperado, String cadenaEsperada) {
         total++;
         ResultadoDijkstra resultado = AlgoritmoDijkstra.calcular(G, origen);
@@ -32,7 +31,6 @@ public class PruebasDijkstra {
 
     }
 
-    // Esto lo hicimos para casos donde puede haber mas de una cadena con el mismo tiempo minimo
     static void probarTiempo(String nombre, Grafo G, int origen, int destino, long tiempoEsperado) {
         total++;
         ResultadoDijkstra resultado = AlgoritmoDijkstra.calcular(G, origen);

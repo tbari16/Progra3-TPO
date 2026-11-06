@@ -14,7 +14,6 @@ public class PruebasFormacionEquipos {
         return new Estudiante(id, "modelo.Estudiante " + id, habilidades);
     }
 
-    // Para comparar equipos, ordenamos sus IDs solamente en la prueba.
     private static String clave(ArrayList<Estudiante> equipo) {
 
         int[] ids = new int[equipo.size()];
