@@ -1,3 +1,10 @@
+package app;
+
+import algoritmos.*;
+import modelo.Estudiante;
+import modelo.Iniciativa;
+import modelo.Publicacion;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -141,7 +148,7 @@ public class Main {
                         destino < 0 || destino >= red.cantidadUsuarios()) {
                     System.out.println("Usuario de origen o destino incorrecto.");
                 } else {
-                    ResultadoDijkstra resultado = Dijkstra.calcular(red, origen);
+                    ResultadoDijkstra resultado = AlgoritmoDijkstra.calcular(red, origen);
                     if (resultado.existeCamino(destino)) {
                         System.out.println("\nCadena mas rapida: " + resultado.obtenerCadena(destino));
                         System.out.println("Tiempo total: " + resultado.obtenerTiempo(destino) + " minutos");
@@ -265,7 +272,7 @@ public class Main {
 
                 for (int i = 0; i < iniciativas.length; i++) {
                     Iniciativa actual = iniciativas[i];
-                    System.out.println("- Iniciativa " + actual.getId()
+                    System.out.println("- modelo.Iniciativa " + actual.getId()
                             + " | Costo: " + actual.getCosto()
                             + " | Impacto: " + actual.getImpacto());
                 }

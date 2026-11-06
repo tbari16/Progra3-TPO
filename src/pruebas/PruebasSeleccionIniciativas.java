@@ -1,4 +1,7 @@
+package pruebas;
 
+import algoritmos.SeleccionIniciativas;
+import modelo.Iniciativa;
 
 public class PruebasSeleccionIniciativas {
 
@@ -60,7 +63,7 @@ public class PruebasSeleccionIniciativas {
 
         System.out.println("Presupuesto: 6");
         System.out.println("Resultado esperado:");
-        System.out.println("Iniciativa 1");
+        System.out.println("modelo.Iniciativa 1");
         System.out.println("Costo total: 6");
         System.out.println("Impacto total: 30");
         System.out.println("Presupuesto restante: 0");
@@ -114,4 +117,8 @@ public class PruebasSeleccionIniciativas {
 
         SeleccionIniciativas.seleccionarIniciativas(caso5, 10);
     }
+
+
+
+
 }

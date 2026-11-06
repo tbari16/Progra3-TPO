@@ -1,39 +1,52 @@
+package pruebas;
 
 
+import algoritmos.AlgoritmoDijkstra;
+import algoritmos.Grafo;
+import algoritmos.ResultadoDijkstra;
+import app.DatosEjemplo;
 
 public class PruebasDijkstra {
+
     static int total = 0;
     static int correctas = 0;
 
     // Esto compara el tiempo minimo y los usuarios de la cadena
     static void probarCamino(String nombre, Grafo G, int origen, int destino, long tiempoEsperado, String cadenaEsperada) {
         total++;
-        ResultadoDijkstra resultado = Dijkstra.calcular(G, origen);
+        ResultadoDijkstra resultado = AlgoritmoDijkstra.calcular(G, origen);
 
         boolean correcto = resultado.obtenerTiempo(destino) == tiempoEsperado && resultado.obtenerCadena(destino).equals(cadenaEsperada);
+
         if (correcto) {
             correctas++;
             System.out.println("OK: " + nombre);
-        } else {
+        }
+
+        else {
             System.out.println("ERROR: " + nombre);
             System.out.println("  Esperado: " + cadenaEsperada + " (" + tiempoEsperado + " min)");
             System.out.println("  Obtenido: " + resultado.obtenerCadena(destino)
                     + " (" + resultado.obtenerTiempo(destino) + " min)");
         }
+
     }
 
     // Esto lo hicimos para casos donde puede haber mas de una cadena con el mismo tiempo minimo
     static void probarTiempo(String nombre, Grafo G, int origen, int destino, long tiempoEsperado) {
         total++;
-        ResultadoDijkstra resultado = Dijkstra.calcular(G, origen);
+        ResultadoDijkstra resultado = AlgoritmoDijkstra.calcular(G, origen);
+
         if (resultado.obtenerTiempo(destino) == tiempoEsperado) {
             correctas++;
             System.out.println("OK: " + nombre);
-        } else {
+        }
+        else {
             System.out.println("ERROR: " + nombre);
             System.out.println("  Esperado: " + tiempoEsperado + " minutos");
             System.out.println("  Obtenido: " + resultado.obtenerTiempo(destino) + " minutos");
         }
+
     }
 
     static void probarCondicion(String nombre, boolean condicion) {
@@ -41,9 +54,11 @@ public class PruebasDijkstra {
         if (condicion) {
             correctas++;
             System.out.println("OK: " + nombre);
-        } else {
+        }
+        else {
             System.out.println("ERROR: " + nombre);
         }
+
     }
 
     //Acá empiezan las pruebas que pensamos con los chicos
@@ -88,7 +103,7 @@ public class PruebasDijkstra {
 
         // PRUEBA 10: grafo pero sin aristas
         Grafo vacio = new Grafo(new String[] {"A", "B"});
-        probarCamino("10. Grafo sin vinculos",
+        probarCamino("10. algoritmos.Grafo sin vinculos",
                 vacio, 0, 1, -1, "No existe cadena");
 
         // PRUEBA 11: un solo usuario
@@ -110,15 +125,17 @@ public class PruebasDijkstra {
         ciclo.agregarArista(1, 2, 2);
         ciclo.agregarArista(2, 0, 1);
         ciclo.agregarArista(0, 2, 12);
-        probarCamino("13. Grafo con un ciclo",
+        probarCamino("13. algoritmos.Grafo con un ciclo",
                 ciclo, 0, 2, 4, "A -> B -> C");
 
         // PRUEBA 14: red de mayor tamanio
         String[] nombres = new String[120];
+
         for (int i = 0; i < nombres.length; i++) {
             nombres[i] = "U" + i;
         }
         Grafo grande = new Grafo(nombres);
+
         for (int i = 0; i < nombres.length - 1; i++) {
             grande.agregarArista(i, i + 1, 1);
         }
@@ -126,24 +143,29 @@ public class PruebasDijkstra {
 
         // PRUEBA 15: no permitir tiempos de cero minutos
         boolean rechazoCero = false;
+
         try {
             red.agregarArista(0, 1, 0);
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e) {
             rechazoCero = true;
         }
         probarCondicion("15. Rechazar tiempo cero", rechazoCero);
 
         // PRUEBA 16: no permitir tiempos negativos
         boolean rechazoNegativo = false;
+
         try {
             red.agregarArista(0, 1, -5);
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e) {
             rechazoNegativo = true;
         }
+
         probarCondicion("16. Rechazar tiempo negativo", rechazoNegativo);
 
         // PRUEBA 17: Dijkstra no debe modificar el grafo original
-        Dijkstra.calcular(red, 0);
+        AlgoritmoDijkstra.calcular(red, 0);
         boolean sinCambios = red.pesoArista(0, 1) == 4 &&
                             red.pesoArista(0, 2) == 12 &&
                             red.pesoArista(0, 3) == 20 &&
@@ -151,4 +173,6 @@ public class PruebasDijkstra {
         probarCondicion("17. El grafo original no cambia", sinCambios);
 
     }
+
+
 }

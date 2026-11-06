@@ -1,7 +1,12 @@
+package app;
+
+import algoritmos.Grafo;
+
 public class DatosEjemplo {
 
     public static Grafo crearRedUsuarios() {
-        // Utilizamos los mismos autores que en Publicacion.java / Main.java
+
+        // Utilizamos los mismos autores que en modelo.Publicacion.java / app.Main.java
         String[] nombres = {"Ana", "Juan", "Sofia", "Pedro"};
         Grafo G = new Grafo(nombres);
 
@@ -15,4 +20,6 @@ public class DatosEjemplo {
 
         return G;
     }
+
+
 }

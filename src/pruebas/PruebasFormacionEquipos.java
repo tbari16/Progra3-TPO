@@ -1,19 +1,27 @@
+package pruebas;
+
+import algoritmos.FormadorEquiposBacktracking;
+import modelo.Estudiante;
+
 import java.util.ArrayList;
 
 public class PruebasFormacionEquipos {
+
     private static int total = 0;
     private static int correctas = 0;
 
     private static Estudiante e(int id, String... habilidades) {
-        return new Estudiante(id, "Estudiante " + id, habilidades);
+        return new Estudiante(id, "modelo.Estudiante " + id, habilidades);
     }
 
     // Para comparar equipos, ordenamos sus IDs solamente en la prueba.
     private static String clave(ArrayList<Estudiante> equipo) {
+
         int[] ids = new int[equipo.size()];
         for (int i = 0; i < equipo.size(); i++) {
             ids[i] = equipo.get(i).getId();
         }
+
         for (int i = 0; i < ids.length; i++) {
             for (int j = i + 1; j < ids.length; j++) {
                 if (ids[j] < ids[i]) {
@@ -23,12 +31,15 @@ public class PruebasFormacionEquipos {
                 }
             }
         }
+
         String texto = "";
         for (int i = 0; i < ids.length; i++) {
             if (i > 0) {
                 texto += "-";
             }
+
             texto += ids[i];
+
         }
         return texto;
     }
@@ -41,38 +52,50 @@ public class PruebasFormacionEquipos {
         ArrayList<String> claves = new ArrayList<>();
         for (ArrayList<Estudiante> equipo : resultados) {
             String codigo = clave(equipo);
+
             if (claves.contains(codigo)) {
                 correcto = false;
             }
+
             claves.add(codigo);
         }
         for (String esperado : esperados) {
             if (!claves.contains(esperado)) {
                 correcto = false;
+
             }
+
         }
 
         if (correcto) {
             correctas++;
             System.out.println("OK: " + nombre);
-        } else {
+        }
+
+        else {
             System.out.println("ERROR: " + nombre);
             System.out.println("  Esperados: " + String.join(", ", esperados));
             System.out.println("  Obtenidos: " + claves);
         }
+
+
     }
 
     private static void pruebaGrande() {
         total++;
         Estudiante[] estudiantes = new Estudiante[12];
+
         for (int i = 0; i < estudiantes.length; i++) {
             estudiantes[i] = e(i + 1);
         }
+
         ArrayList<ArrayList<Estudiante>> resultados = FormadorEquiposBacktracking.formarEquipos(estudiantes, 3, new String[0], new int[0], new int[0][0]);
         ArrayList<String> claves = new ArrayList<>();
         boolean correcto = resultados.size() == 220; // C(12,3) = 220
+
         for (ArrayList<Estudiante> equipo : resultados) {
             String codigo = clave(equipo);
+
             if (equipo.size() != 3 || claves.contains(codigo)) {
                 correcto = false;
             }
@@ -81,9 +104,12 @@ public class PruebasFormacionEquipos {
         if (correcto) {
             correctas++;
             System.out.println("OK: 16. Doce estudiantes, equipos de tres (220 sin repetidos)");
-        } else {
+        }
+        else {
             System.out.println("ERROR: 16. Doce estudiantes, equipos de tres");
         }
+
+
     }
 
     public static void main(String[] args) {
@@ -95,6 +121,7 @@ public class PruebasFormacionEquipos {
                 e(5, "Diseno", "Python"),
                 e(6, "Testing")
         };
+
         String[] requeridas = {"Java", "Python", "BD", "Diseno"};
         int[] obligatorioAna = {1};
         int[][] incompatibles = {{2, 4}};
@@ -165,4 +192,6 @@ public class PruebasFormacionEquipos {
             throw new AssertionError("Hay pruebas de Backtracking que fallaron");
         }
     }
+
+
 }

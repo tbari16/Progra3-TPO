@@ -1,4 +1,7 @@
+package modelo;
+
 public class Iniciativa {
+
     private int id;
     private int costo;
     private int impacto;
@@ -8,6 +11,7 @@ public class Iniciativa {
         this.costo = costo;
         this.impacto = impacto;
     }
+
 
     public int getId() {
         return id;
@@ -20,4 +24,6 @@ public class Iniciativa {
     public int getImpacto() {
         return impacto;
     }
+
+
 }

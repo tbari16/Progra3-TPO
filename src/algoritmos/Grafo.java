@@ -1,4 +1,7 @@
+package algoritmos;
+
 public class Grafo {
+
     private String[] usuarios;
     private long[][] tiempos;
 
@@ -12,7 +15,9 @@ public class Grafo {
                 tiempos[i][j] = -1;
             }
         }
+
     }
+
 
     public int cantidadUsuarios() {
         return usuarios.length;
@@ -35,11 +40,16 @@ public class Grafo {
         tiempos[origen][destino] = minutos;
     }
 
+
     public boolean existeArista(int origen, int destino) {
         return tiempos[origen][destino] != -1;
     }
 
+
     public long pesoArista(int origen, int destino) {
         return tiempos[origen][destino];
     }
+
+
+
 }

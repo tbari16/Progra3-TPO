@@ -1,3 +1,8 @@
+package pruebas;
+
+import algoritmos.CadenasAlternativas;
+import algoritmos.Grafo;
+
 import java.util.ArrayList;
 
 public class PruebasCadenasAlternativas {
@@ -39,12 +44,12 @@ public class PruebasCadenasAlternativas {
         tiemposGrandes.agregarArista(0, 1, 3000000000L);
         tiemposGrandes.agregarArista(1, 2, 3000000000L);
         tiemposGrandes.agregarArista(0, 2, 7000000000L);
-        probar("Caso 11 - Tiempos long", tiemposGrandes,
-                0, 2, 6500000000L, 1, new int[]{}, 1, 6000000000L,
-                new int[]{0, 1, 2});
+
+        probar("Caso 11 - Tiempos long", tiemposGrandes, 0, 2, 6500000000L, 1, new int[]{}, 1, 6000000000L, new int[]{0, 1, 2});
     }
 
     private static Grafo crearGrafoPruebas() {
+
         String[] usuarios = {"Ana", "Bruno", "Carla", "Diego", "Elena"};
         Grafo grafo = new Grafo(usuarios);
 
@@ -61,13 +66,10 @@ public class PruebasCadenasAlternativas {
         grafo.agregarArista(3, 1, 1);
 
         return grafo;
+
     }
 
-    private static void probar(String nombre, Grafo grafo,
-                               int origen, int destino, long tiempoMaximo,
-                               int limiteIntermediarios, int[] excluidos,
-                               int cantidadEsperada, long tiempoEsperado,
-                               int[] caminoEsperado) {
+    private static void probar(String nombre, Grafo grafo, int origen, int destino, long tiempoMaximo, int limiteIntermediarios, int[] excluidos, int cantidadEsperada, long tiempoEsperado, int[] caminoEsperado) {
 
         System.out.println("\n=============================================");
         System.out.println(nombre);
@@ -75,17 +77,19 @@ public class PruebasCadenasAlternativas {
                 + " cadenas, tiempo minimo " + tiempoEsperado);
 
         CadenasAlternativas buscador = new CadenasAlternativas(grafo);
-        buscador.buscarCadenas(origen, destino, tiempoMaximo,
-                limiteIntermediarios, excluidos);
+        buscador.buscarCadenas(origen, destino, tiempoMaximo, limiteIntermediarios, excluidos);
 
         ArrayList<Integer> caminoObtenido = buscador.getMejorCamino();
         boolean caminoCorrecto = caminoObtenido.size() == caminoEsperado.length;
+
         if (caminoCorrecto) {
             for (int i = 0; i < caminoEsperado.length; i++) {
                 if (caminoObtenido.get(i) != caminoEsperado[i]) {
+
                     caminoCorrecto = false;
                     break;
                 }
+
             }
         }
 
@@ -94,6 +98,7 @@ public class PruebasCadenasAlternativas {
                 && caminoCorrecto;
 
         System.out.println(correcto ? "PRUEBA CORRECTA" : "PRUEBA INCORRECTA");
+
         if (!correcto) {
             System.out.println("Cantidad obtenida: " + buscador.getCantidadCadenas());
             System.out.println("Tiempo obtenido: " + buscador.getMenorTiempo());
@@ -101,4 +106,6 @@ public class PruebasCadenasAlternativas {
             throw new AssertionError("Fallo: " + nombre);
         }
     }
+
+
 }

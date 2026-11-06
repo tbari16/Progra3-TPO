@@ -1,4 +1,7 @@
+package modelo;
+
 public class Estudiante {
+
     private int id;
     private String nombre;
     private String[] habilidades;
@@ -29,4 +32,6 @@ public class Estudiante {
         }
         return false;
     }
+
+
 }

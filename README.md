@@ -1,6 +1,6 @@
 Antes de la explicación del código, algunas aclaraciones sobre como ejecutar el código:
-- El archivo principal es el Main que al ejecutarlo permitirá ver un menú en consola para poder ver las 3 funcionalidades.
-- Los archivos que empiezan por "Prueba" son los casos de prueba de cada funcionalidad: PruebasOrdenamientoPublicaciones corresponde a la funcionalidad 1, PruebasDijkstra corresponde a la funcionalidad 2 y PruebasSeleccionIniciativas corresponde a la funcionalidad 3. Dentro del código está comentado que hace cada prueba y que busca verificar.
+- El archivo principal es el app.Main que al ejecutarlo permitirá ver un menú en consola para poder ver las 3 funcionalidades.
+- Los archivos que empiezan por "Prueba" son los casos de prueba de cada funcionalidad: pruebas.PruebasOrdenamientoPublicaciones corresponde a la funcionalidad 1, pruebas.PruebasDijkstra corresponde a la funcionalidad 2 y pruebas.PruebasSeleccionIniciativas corresponde a la funcionalidad 3. Dentro del código está comentado que hace cada prueba y que busca verificar.
 
 
 # Funcionalidades Obligatorias
@@ -72,17 +72,17 @@ El objetivo es lograr una cadena de usuarios que permita transmitir una convocat
 
 ### 2. Selección de la estrategia y justificación
 
-La estrategia seleccionada para resolver el problema fue **Greedy** usando el algoritmo de **Dijkstra**.
+La estrategia seleccionada para resolver el problema fue **Greedy** usando el algoritmo de **algoritmos.AlgoritmoDijkstra**.
 
 La razón por la que decidimos utilizar esta estrategia y algoritmo es porque el problema se puede representar con un grafo dirigido y ponderado en el que cada vértice o nodo representa a los usuarios, las aristas representan los vínculos y el peso de las aristas los tiempos de transmisión.
 
-Sabiendo que se puede representar como un grafo dirigido, nosotros sabemos que Dijkstra permite encontrar los caminos de menor costo desde un vértice de origen hacia los demás vértices alcanzables del grafo. Además, sabemos que forma parte de la estrategia de Greedy porque en cada iteración, se selecciona al usuario pendiente que tenga menor tiempo acumulado conocido desde el origen y una vez que se seleccionó no se vuelve a reconsiderar.
+Sabiendo que se puede representar como un grafo dirigido, nosotros sabemos que algoritmos.AlgoritmoDijkstra permite encontrar los caminos de menor costo desde un vértice de origen hacia los demás vértices alcanzables del grafo. Además, sabemos que forma parte de la estrategia de Greedy porque en cada iteración, se selecciona al usuario pendiente que tenga menor tiempo acumulado conocido desde el origen y una vez que se seleccionó no se vuelve a reconsiderar.
 
 Esta estrategia es adecuada porque todos los tiempos de transmisión son positivos y esto nos permite garantizar que el algoritmo encuentre un camino de tiempo mínimo. A parte, esta implementación va a permitirnos guardar la información necesaria para reconstruir la cadena de usuarios y mostrar las decisiones tomadas durante el cálculo.
 
 ### 3. Explicación general de la implementación
 
-Para poder implementar esta funcionalidad, creamos una clase Grafo que va a representar la red de usuarios mediante una matriz de adyacencia. En esta matriz se almacenan los tiempos de transmisión entre los usuarios que tienen vínculos y cuando no existe una conexión directa, se usa -1. Luego, el algoritmo de Dijkstra se implementó siguiendo el pseudocódigo que vimos en clase.
+Para poder implementar esta funcionalidad, creamos una clase algoritmos.Grafo que va a representar la red de usuarios mediante una matriz de adyacencia. En esta matriz se almacenan los tiempos de transmisión entre los usuarios que tienen vínculos y cuando no existe una conexión directa, se usa -1. Luego, el algoritmo de algoritmos.AlgoritmoDijkstra se implementó siguiendo el pseudocódigo que vimos en clase.
 
 Primero, se toma el usuario de origen y se lo incorpora al conjunto de visitados. Después se crea el grafo auxiliar para almacenar los mejores tiempos conocidos desde el origen hacia el resto de usuarios (al principio este grafo tiene los tiempos de vínculos directos que salen del origen). Además, se usa un conjunto de usuarios pendientes que son aquellos usuarios que tienen tiempos mínimos no confirmados todavía.
 
@@ -100,13 +100,13 @@ La estrategia que también estuvo en consideración para resolver esta funcional
 
 - Programación dinámica con el algoritmo de Floyd: Este algoritmo nos permitiría calcular los caminos mínimos entre todos los pares de vértices de un grafo. Sin embargo, para esta funcionalidad solamente queremos calcular la cadena más rápida desde un usuario de origen hasta uno de destino. Usando Floyd estaríamos calculando también los caminos entre muchos otros pares de usuarios que no necesitamos ni queremos consultar.
 
-Otra decisión que nos hizo descartar este algoritmo fue la complejidad temporal ya que Floyd tiene una complejidad de O(n³) mientras que Dijkstra tiene una complejidad de O(n²).
+Otra decisión que nos hizo descartar este algoritmo fue la complejidad temporal ya que Floyd tiene una complejidad de O(n³) mientras que algoritmos.AlgoritmoDijkstra tiene una complejidad de O(n²).
 
 Por otro lado, en un primer análisis grupal se pensaron en estrategias como Backtracking o la utilización de Prim o Kruskal, sin embargo se descartaron rápidamente por las siguientes razones: Backtracking haría que se calculen las diferentes cadenas entre el origen y el destino pero esta estrategia puede llegar a explorar una gran cantidad de caminos a medida que crecen los usuarios y vínculos. Luego, Prim y Kuskal se descartaron porque están orientados a encontrar o calcular un árbol de recubrimiento mínimo y no a calcular el camino mínimo o más corto entre dos usuarios.
 
 ### 5. Análisis de complejidad temporal
 
-Como ya mencionamos anteriormente, la implementación de Dijkstra usa una matriz de adyacencia y hace la selección de los usuarios pendientes mediante recorridos sobre los vértices.
+Como ya mencionamos anteriormente, la implementación de algoritmos.AlgoritmoDijkstra usa una matriz de adyacencia y hace la selección de los usuarios pendientes mediante recorridos sobre los vértices.
 
 Primero se crean las estructuras necesarias y se identifican los vínculos desde el origen. Después, empieza un ciclo principal que puede repetirse hasta n - 1 veces, donde n representa la cantidad de usuarios en el grafo. 
 
@@ -163,7 +163,7 @@ Esto permite analizar las distintas combinaciones posibles sin tener que volver 
 
 ### 3. Explicación general de la implementación
 
-Para implementar esta funcionalidad creamos una clase Iniciativa, que contiene el identificador, el costo y el impacto de cada iniciativa.
+Para implementar esta funcionalidad creamos una clase modelo.Iniciativa, que contiene el identificador, el costo y el impacto de cada iniciativa.
 
 Después, en la clase encargada de realizar la selección, utilizamos una matriz de Programación Dinámica. La matriz tiene una fila por cada iniciativa y una columna por cada valor posible del presupuesto, desde cero hasta el presupuesto máximo disponible.
 

@@ -1,14 +1,17 @@
+package pruebas;
 
+import modelo.Publicacion;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class PruebasOrdenamientoPublicaciones {
+
     static int total = 0;
     static int correctas = 0;
 
     static Publicacion p(int id, int dia, int hora, int reacciones, int comentarios) {
-        return new Publicacion(id, "Estudiante",
+        return new Publicacion(id, "modelo.Estudiante",
                 LocalDateTime.of(2026, 10, dia, hora, 0),
                 reacciones, comentarios);
     }
@@ -23,35 +26,45 @@ public class PruebasOrdenamientoPublicaciones {
     static void probar(String nombre, ArrayList<Publicacion> datos, boolean porRelevancia, int[] esperados) {
         total++;
         ArrayList<Publicacion> resultado;
+
         if (porRelevancia) {
             resultado = Publicacion.ordenarPorRelevancia(datos);
-        } else {
+        }
+        else {
             resultado = Publicacion.ordenarPorFecha(datos);
         }
+
         boolean correcto = resultado.size() == esperados.length;
         if (correcto) {
+
             for (int i = 0; i < esperados.length; i++) {
                 if (resultado.get(i).getId() != esperados[i]) {
                     correcto = false;
                     break;
                 }
             }
+
         }
         if (correcto) {
             correctas++;
             System.out.println("OK: " + nombre);
-        } else {
+        }
+        else {
             System.out.println("ERROR: " + nombre);
             System.out.print("Esperado: ");
+
             for (int id : esperados) {
                 System.out.print(id + " ");
             }
             System.out.print("\nObtenido: ");
+
             for (Publicacion p : resultado) {
                 System.out.print(p.getId() + " ");
             }
             System.out.println();
         }
+
+
     }
 
     public static void main(String[] args) {
@@ -95,16 +108,16 @@ public class PruebasOrdenamientoPublicaciones {
                         p(5, 12, 9, 1, 4)),
                 true, new int[] {3, 5, 8});
 
-        // PRUEBAS 7 Y 8: Publicaciones originales del Main
+        // PRUEBAS 7 Y 8: Publicaciones originales del app.Main
         ArrayList<Publicacion> ejemploMain = lista(
                 new Publicacion(3, "Ana", LocalDateTime.of(2026, 10, 15, 18, 30), 20, 5),
                 new Publicacion(1, "Juan", LocalDateTime.of(2026, 10, 14, 12, 0), 30, 5),
                 new Publicacion(2, "Sofia", LocalDateTime.of(2026, 10, 15, 18, 30), 15, 10),
                 new Publicacion(4, "Pedro", LocalDateTime.of(2026, 10, 13, 10, 0), 10, 2)
         );
-        probar("7. Datos del Main ordenados por fecha",
+        probar("7. Datos del app.Main ordenados por fecha",
                 ejemploMain, false, new int[] {2, 3, 1, 4});
-        probar("8. Datos del Main ordenados por relevancia",
+        probar("8. Datos del app.Main ordenados por relevancia",
                 ejemploMain, true, new int[] {1, 2, 3, 4});
 
         // PRUEBA 9: Lista vacia
@@ -125,29 +138,37 @@ public class PruebasOrdenamientoPublicaciones {
 
         Publicacion.ordenarPorFecha(original);
         Publicacion.ordenarPorRelevancia(original);
-        if (original.get(0).getId() == 3 &&
-                original.get(1).getId() == 1 &&
-                original.get(2).getId() == 2) {
+        if (original.get(0).getId() == 3 && original.get(1).getId() == 1 && original.get(2).getId() == 2) {
 
             correctas++;
             System.out.println("OK: 11. La lista original no cambia");
-        } else {
+        }
+        else {
             System.out.println("ERROR: 11. La lista original no cambia");
         }
 
         // PRUEBA 12: Mil publicaciones con igual relevancia y fecha
         ArrayList<Publicacion> milPublicaciones = new ArrayList<>();
         int[] esperados = new int[1000];
+
         for (int id = 1000; id >= 1; id--) {
             milPublicaciones.add(p(id, 15, 18, 5, 0));
         }
+
         for (int i = 0; i < 1000; i++) {
             esperados[i] = i + 1;
+
         }
+
         probar("12. Mil publicaciones con empate", milPublicaciones, true, esperados);
         System.out.println("\nPruebas correctas: " + correctas + " de " + total);
         if (correctas != total) {
             throw new AssertionError("Hay pruebas que fallaron");
         }
+
+
     }
+
+
+
 }

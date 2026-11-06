@@ -1,3 +1,5 @@
+package algoritmos;
+
 public class ResultadoFloyd {
 
     private Grafo G;
@@ -11,8 +13,8 @@ public class ResultadoFloyd {
     }
 
     public long getTiempo(int origen, int destino) {
-        if (origen < 0 || origen >= G.cantidadUsuarios() ||
-                destino < 0 || destino >= G.cantidadUsuarios()) {
+
+        if (origen < 0 || origen >= G.cantidadUsuarios() || destino < 0 || destino >= G.cantidadUsuarios()) {
             throw new IllegalArgumentException("Usuario inexistente");
         }
 
@@ -21,11 +23,14 @@ public class ResultadoFloyd {
         }
 
         return distancias[origen][destino];
+
     }
 
     public String getCadena(int origen, int destino) {
+
         if (getTiempo(origen, destino) == -1) {
             return "No existe una cadena de difusion";
+
         }
 
         StringBuilder cadena = new StringBuilder();
@@ -34,12 +39,15 @@ public class ResultadoFloyd {
         cadena.append(G.nombre(actual));
 
         if (origen == destino) {
+
             return cadena.toString();
+
         }
 
         int cantidad = 0;
 
         while (actual != destino && cantidad < G.cantidadUsuarios()) {
+
             actual = siguiente[actual][destino];
 
             if (actual == -1) {
