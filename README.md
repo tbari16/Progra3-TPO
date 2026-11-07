@@ -1,3 +1,5 @@
+Integrantes: Anton Ignacio; Barisone Tomás; Vargas Facundo.
+
 Antes de la explicación del código, algunas aclaraciones sobre como ejecutar el código:
 - El archivo principal es el app.Main que al ejecutarlo permitirá ver un menú en consola para poder ver las 3 funcionalidades.
 - Los archivos que empiezan por "Prueba" son los casos de prueba de cada funcionalidad: pruebas.PruebasOrdenamientoPublicaciones corresponde a la funcionalidad 1, pruebas.PruebasDijkstra corresponde a la funcionalidad 2 y pruebas.PruebasSeleccionIniciativas corresponde a la funcionalidad 3. Dentro del código está comentado que hace cada prueba y que busca verificar.
