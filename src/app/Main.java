@@ -62,9 +62,11 @@ public class Main {
 
             if (opcion == 1) {
                 menuPublicaciones(teclado, publicaciones);
-            } else if (opcion == 2) {
+            }
+            else if (opcion == 2) {
                 menuDifusion(teclado, red);
-            } else if (opcion == 3) {
+            }
+            else if (opcion == 3) {
                 menuIniciativas(teclado, iniciativas, presupuesto);
             }
             else if (opcion == 4) {
@@ -73,20 +75,27 @@ public class Main {
             else if (opcion == 5) {
                 menuEquipos(teclado, estudiantes, habilidadesRequeridas,
                         obligatorios, incompatibles);
-            } else if (opcion == 6) {
+            }
+            else if (opcion == 6) {
                 menuCadenasAlternativas(teclado, red);
-            } else if (opcion == 7) {
+            }
+            else if (opcion == 7) {
                 System.out.println("Saliendo del programa...");
-            } else {
+            }
+            else {
                 System.out.println("Opcion incorrecta.");
             }
 
-        } while (opcion != 7);
+        }
+        while (opcion != 7);
 
         teclado.close();
+
+
     }
 
     private static void menuPublicaciones(Scanner teclado, ArrayList<Publicacion> publicaciones) {
+
         int opcion;
         do {
             System.out.println("\n--- MURO DE PUBLICACIONES ---");
@@ -100,32 +109,44 @@ public class Main {
             if (opcion == 1) {
                 System.out.println("\nPUBLICACIONES ORIGINALES:");
                 mostrarPublicaciones(publicaciones);
-            } else if (opcion == 2) {
+            }
+
+            else if (opcion == 2) {
                 System.out.println("\nORDENADAS POR FECHA:");
                 ArrayList<Publicacion> porFecha = Publicacion.ordenarPorFecha(publicaciones);
                 mostrarPublicaciones(porFecha);
-            } else if (opcion == 3) {
+            }
+
+            else if (opcion == 3) {
                 System.out.println("\nORDENADAS POR RELEVANCIA:");
                 ArrayList<Publicacion> porRelevancia = Publicacion.ordenarPorRelevancia(publicaciones);
                 mostrarPublicaciones(porRelevancia);
-            } else if (opcion != 4) {
+            }
+
+            else if (opcion != 4) {
                 System.out.println("Opcion incorrecta.");
             }
-        } while (opcion != 4);
+        }
+
+        while (opcion != 4);
     }
 
 
     private static void mostrarPublicaciones(ArrayList<Publicacion> publicaciones) {
+
         if (publicaciones.isEmpty()) {
             System.out.println("No hay publicaciones para mostrar.");
-        } else {
+        }
+        else {
             for (Publicacion p : publicaciones) {
                 System.out.println(p);
             }
         }
+
     }
 
     private static void menuDifusion(Scanner teclado, Grafo red) {
+
         int opcion;
         do {
             System.out.println("\n--- CADENA DE DIFUSION MAS RAPIDA ---");
@@ -144,10 +165,13 @@ public class Main {
                 System.out.print("Numero del usuario de destino: ");
                 int destino = leerNumero(teclado);
 
+
                 if (origen < 0 || origen >= red.cantidadUsuarios() ||
                         destino < 0 || destino >= red.cantidadUsuarios()) {
                     System.out.println("Usuario de origen o destino incorrecto.");
-                } else {
+                }
+
+                else {
                     ResultadoDijkstra resultado = AlgoritmoDijkstra.calcular(red, origen);
                     if (resultado.existeCamino(destino)) {
                         System.out.println("\nCadena mas rapida: " + resultado.obtenerCadena(destino));
@@ -158,26 +182,39 @@ public class Main {
                     }
 
                     System.out.print("¿Mostrar las decisiones de Dijkstra? (1=Si, 2=No): ");
+
                     int mostrar = leerNumero(teclado);
                     if (mostrar == 1) {
                         System.out.println("\n--- DECISIONES DEL ALGORITMO ---");
                         System.out.print(resultado.obtenerDecisiones());
                     }
+
                 }
-            } else if (opcion == 2) {
+
+            }
+
+            else if (opcion == 2) {
+
                 System.out.println("\nVINCULOS HABILITADOS (ORIGEN -> DESTINO):");
+
                 for (int i = 0; i < red.cantidadUsuarios(); i++) {
                     for (int j = 0; j < red.cantidadUsuarios(); j++) {
+
                         if (red.existeArista(i, j)) {
                             System.out.println(red.nombre(i) + " -> " + red.nombre(j)
                                     + ": " + red.pesoArista(i, j) + " minutos");
                         }
+
                     }
                 }
-            } else if (opcion != 3) {
+            }
+
+            else if (opcion != 3) {
                 System.out.println("Opcion incorrecta.");
             }
-        } while (opcion != 3);
+
+        }
+        while (opcion != 3);
     }
 
     private static void menuFloyd(Scanner teclado, Grafo red, ResultadoFloyd resultado) {
@@ -204,12 +241,13 @@ public class Main {
                 System.out.print("Numero del usuario de destino: ");
                 int destino = leerNumero(teclado);
 
-                if (origen < 0 || origen >= red.cantidadUsuarios() ||
-                        destino < 0 || destino >= red.cantidadUsuarios()) {
+                if (origen < 0 || origen >= red.cantidadUsuarios() || destino < 0 || destino >= red.cantidadUsuarios()) {
 
                     System.out.println("Usuario de origen o destino incorrecto.");
 
-                } else {
+                }
+
+                else {
 
                     long tiempo = resultado.getTiempo(origen, destino);
 
@@ -217,7 +255,8 @@ public class Main {
                         System.out.println("\nNo existe una cadena de difusion entre "
                                 + red.nombre(origen) + " y " + red.nombre(destino) + ".");
 
-                    } else {
+                    }
+                    else {
                         System.out.println("\nCadena mas rapida: "
                                 + resultado.getCadena(origen, destino));
 
@@ -225,11 +264,14 @@ public class Main {
                     }
                 }
 
-            } else if (opcion == 2) {
+            }
+
+            else if (opcion == 2) {
 
                 System.out.println("\n--- RESULTADOS DE FLOYD ---");
 
                 for (int i = 0; i < red.cantidadUsuarios(); i++) {
+
                     for (int j = 0; j < red.cantidadUsuarios(); j++) {
 
                         long tiempo = resultado.getTiempo(i, j);
@@ -239,18 +281,26 @@ public class Main {
 
                         if (tiempo == -1) {
                             System.out.println("No existe cadena de difusion.");
-                        } else {
+                        }
+                        else {
+
                             System.out.println(resultado.getCadena(i, j)
                                     + " | Tiempo: " + tiempo + " minutos");
                         }
                     }
+
                 }
 
-            } else if (opcion != 3) {
+            }
+
+            else if (opcion != 3) {
                 System.out.println("Opcion incorrecta.");
             }
 
-        } while (opcion != 3);
+        }
+        while (opcion != 3);
+
+
     }
 
 
@@ -271,25 +321,30 @@ public class Main {
                 System.out.println("Iniciativas:");
 
                 for (int i = 0; i < iniciativas.length; i++) {
+
                     Iniciativa actual = iniciativas[i];
                     System.out.println("- modelo.Iniciativa " + actual.getId()
                             + " | Costo: " + actual.getCosto()
                             + " | Impacto: " + actual.getImpacto());
                 }
 
-            } else if (opcion == 2) {
+            }
+            else if (opcion == 2) {
+
                 System.out.println("\n--- RESULTADO DE LA SELECCION ---");
                 SeleccionIniciativas.seleccionarIniciativas(iniciativas, presupuesto);
 
-            } else if (opcion != 3) {
+            }
+            else if (opcion != 3) {
                 System.out.println("Opcion incorrecta.");
             }
 
-        } while (opcion != 3);
+        }
+
+        while (opcion != 3);
     }
 
-    private static void menuEquipos(Scanner teclado, Estudiante[] estudiantes,
-                                    String[] habilidadesRequeridas, int[] obligatorios, int[][] incompatibles) {
+    private static void menuEquipos(Scanner teclado, Estudiante[] estudiantes, String[] habilidadesRequeridas, int[] obligatorios, int[][] incompatibles) {
 
         int opcion;
         do {
@@ -302,63 +357,88 @@ public class Main {
 
             if (opcion == 1) {
                 System.out.println("\nESTUDIANTES DISPONIBLES:");
+
                 for (Estudiante e : estudiantes) {
+
                     System.out.print(e.getId() + ". " + e.getNombre() + " | Habilidades: ");
+
                     for (String habilidad : e.getHabilidades()) {
                         System.out.print(habilidad + " ");
                     }
                     System.out.println();
+
                 }
 
                 System.out.print("Habilidades requeridas: ");
+
                 for (String habilidad : habilidadesRequeridas) {
                     System.out.print(habilidad + " ");
                 }
                 System.out.println();
 
                 System.out.print("IDs obligatorios: ");
+
                 for (int id : obligatorios) {
                     System.out.print(id + " ");
                 }
+
                 System.out.println();
 
                 System.out.println("Pares incompatibles:");
+
                 for (int[] par : incompatibles) {
                     System.out.println("- IDs " + par[0] + " y " + par[1]);
+
                 }
 
-            } else if (opcion == 2) {
+            }
+            else if (opcion == 2) {
+
                 System.out.print("Cantidad de integrantes por equipo: ");
                 int tamano = leerNumero(teclado);
 
                 if (tamano <= 0 || tamano > estudiantes.length) {
                     System.out.println("Tamano incorrecto.");
-                } else {
+                }
+
+                else {
                     ArrayList<ArrayList<Estudiante>> equipos = FormadorEquiposBacktracking.formarEquipos(
                             estudiantes, tamano, habilidadesRequeridas,
                             obligatorios, incompatibles);
 
                     if (equipos.isEmpty()) {
                         System.out.println("No hay equipos que cumplan las restricciones.");
-                    } else {
+                    }
+
+                    else {
                         System.out.println("\nEquipos validos encontrados: " + equipos.size());
+
                         for (int i = 0; i < equipos.size(); i++) {
                             System.out.print("Equipo " + (i + 1) + ": ");
                             ArrayList<Estudiante> equipo = equipos.get(i);
+
                             for (int j = 0; j < equipo.size(); j++) {
+
                                 if (j > 0) {
                                     System.out.print(" - ");
                                 }
+
                                 System.out.print(equipo.get(j).getNombre());
+
                             }
                             System.out.println();
                         }
                     }
                 }
-            } else if (opcion != 3) {
-                System.out.println("Opcion incorrecta.");
             }
-        } while (opcion != 3);
+            else if (opcion != 3) {
+
+                System.out.println("Opcion incorrecta.");
+
+            }
+
+        }
+        while (opcion != 3);
     }
 
     // FUNCIONALIDAD B3: busqueda de todas las cadenas alternativas con Backtracking.
@@ -372,7 +452,9 @@ public class Main {
             System.out.print("Elegi una opcion: ");
             opcion = leerNumero(teclado);
 
+
             if (opcion == 1) {
+
                 System.out.println("\nUsuarios disponibles:");
                 mostrarUsuarios(red);
 
@@ -381,11 +463,15 @@ public class Main {
                 System.out.print("Numero del usuario de destino: ");
                 int destino = leerNumero(teclado);
 
-                if (origen < 0 || origen >= red.cantidadUsuarios()
-                        || destino < 0 || destino >= red.cantidadUsuarios()) {
+
+
+                if (origen < 0 || origen >= red.cantidadUsuarios() || destino < 0 || destino >= red.cantidadUsuarios()) {
                     System.out.println("Usuario de origen o destino incorrecto.");
                     continue;
+
                 }
+
+
 
                 System.out.print("Tiempo maximo de transmision (minutos): ");
                 long tiempoMaximo = leerNumeroLargo(teclado);
@@ -422,40 +508,52 @@ public class Main {
                 }
 
                 if (excluidosValidos) {
+
                     CadenasAlternativas buscador = new CadenasAlternativas(red);
                     System.out.println("\n--- RESULTADOS B3 ---");
-                    buscador.buscarCadenas(origen, destino, tiempoMaximo,
-                            maxIntermediarios, usuariosExcluidos);
+                    buscador.buscarCadenas(origen, destino, tiempoMaximo, maxIntermediarios, usuariosExcluidos);
+
                 }
 
-            } else if (opcion != 2) {
+            }
+
+            else if (opcion != 2) {
                 System.out.println("Opcion incorrecta.");
             }
 
-        } while (opcion != 2);
+
+        }
+        while (opcion != 2);
     }
 
     private static long leerNumeroLargo(Scanner teclado) {
+
         if (!teclado.hasNextLong()) {
             System.out.println("Debes ingresar un numero entero.");
             teclado.next();
             return -1;
         }
+
         return teclado.nextLong();
     }
 
     private static void mostrarUsuarios(Grafo red) {
+
         for (int i = 0; i < red.cantidadUsuarios(); i++) {
             System.out.println(i + ". " + red.nombre(i));
+
         }
+
     }
 
     private static int leerNumero(Scanner teclado) {
+
         if (!teclado.hasNextInt()) {
             System.out.println("Debes ingresar un numero.");
             teclado.next();
             return -1;
         }
+
         return teclado.nextInt();
     }
 

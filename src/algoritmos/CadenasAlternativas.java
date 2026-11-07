@@ -164,8 +164,19 @@ public class CadenasAlternativas {
         return cantidadCadenas;
     }
 
+
     public long getMenorTiempo() {
-        return cantidadCadenas == 0 ? -1 : menorTiempo;
+
+        if (cantidadCadenas == 0) {
+            return -1;
+
+        }
+        else {
+
+            return menorTiempo;
+
+        }
+
     }
 
     public ArrayList<Integer> getMejorCamino() {

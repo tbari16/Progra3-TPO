@@ -19,6 +19,7 @@ public class DatosEjemplo {
         G.agregarArista(2, 3, 2);  // Sofia -> Pedro
 
         return G;
+
     }
 
 
